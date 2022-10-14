@@ -1,3 +1,4 @@
+[![Codemagic build status](https://api.codemagic.io/apps/6349b672816f0c62fd191b04/6349b672816f0c62fd191b03/status_badge.svg)](https://codemagic.io/apps/6349b672816f0c62fd191b04/6349b672816f0c62fd191b03/latest_build)
 # Ditonton
 My last project of Menjadi Flutter Developer Expert course at Dicoding.
 ---
@@ -6,9 +7,9 @@ I made changes to this starter project according to the criteria given by Dicodi
 
 ## Criteria
  - [ ] Implement *Continous Integration*
-   - [ ] Run application tests automatically. All tests must be passed and retain the features of the previous submission.
-   - [ ] Runs every time there is a push of the latest code into the repository.
-   - [ ] Display the build status badge in the GitHub repository readme file.
+   - [x] Run application tests automatically. All tests must be passed and retain the features of the previous submission.
+   - [x] Runs every time there is a push of the latest code into the repository.
+   - [x] Display the build status badge in the GitHub repository readme file.
    - [ ] Attach a screenshot of one of the builds of the CI service.
  - [ ] Use BLoC library
  - [ ] Implement SSL Pinning
