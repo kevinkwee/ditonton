@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
+import 'common/utils.dart';
 import 'data/datasources/db/database_helper.dart';
 import 'data/datasources/db/television_database_helper.dart';
 import 'data/datasources/movie_local_data_source.dart';
@@ -162,5 +166,9 @@ void init() {
   );
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerSingletonAsync<http.Client>(
+    () async => IOClient(
+      HttpClient(context: await getGlobalSecurityContext()),
+    ),
+  );
 }

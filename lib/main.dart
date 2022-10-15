@@ -27,8 +27,10 @@ import 'presentation/provider/television/watchlist_show_notifier.dart';
 import 'presentation/provider/top_rated_movies_notifier.dart';
 import 'presentation/provider/watchlist_movie_notifier.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   di.init();
+  await di.locator.allReady();
   runApp(const MyApp());
 }
 

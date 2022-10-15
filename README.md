@@ -12,7 +12,7 @@ I made changes to this starter project according to the criteria given by Dicodi
    - [x] Display the build status badge in the GitHub repository readme file.
    - [ ] Attach a screenshot of one of the builds of the CI service.
  - [ ] Use BLoC library
- - [ ] Implement SSL Pinning
+ - [x] Implement SSL Pinning
  - [ ] Integrate Firebase Analytics and Crashlytics
    - [ ] Ensure developers always receive feedback from users, especially regarding stability and error reports.
    - [ ] Attach screenshots of Analytics and Crashlytics pages.

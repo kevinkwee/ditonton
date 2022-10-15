@@ -1,8 +1,8 @@
-import 'package:ditonton/domain/usecases/television/get_popular_shows.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../common/state_enum.dart';
 import '../../../domain/entities/television.dart';
+import '../../../domain/usecases/television/get_popular_shows.dart';
 
 class PopularShowsNotifier extends ChangeNotifier {
   PopularShowsNotifier(this.getPopularShows);
