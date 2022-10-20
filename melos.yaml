@@ -1,0 +1,14 @@
+name: ditonton
+
+packages:
+  - "."
+  - "packages/**"
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  test:
+    run: melos exec --dir-exists=test -- "flutter test"
+    description: Run `flutter test` in all packages
