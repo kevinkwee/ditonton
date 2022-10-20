@@ -1,0 +1,32 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:television/src/data/models/television_season_model.dart';
+
+import '../../dummy_data/dummy_objects.dart';
+
+void main() {
+  group('toEntity', () {
+    test('should return a TelevisionSeason entity', () {
+      final result = testTelevisionSeasonModel.toEntity();
+      expect(result, testTelevisionSeason);
+    });
+  });
+
+  group('fromJson', () {
+    const json = {
+      'air_date': '2011-04-17',
+      'episode_count': 10,
+      'id': 3624,
+      'name': 'Season 1',
+      'overview':
+          'Trouble is brewing in the Seven Kingdoms of Westeros. For the driven inhabitants of this visionary world, control of Westeros\' Iron Throne holds the lure of great power. But in a land where the seasons can last a lifetime, winter is coming...and beyond the Great Wall that protects them, an ancient evil has returned. In Season One, the story centers on three primary areas: the Stark and the Lannister families, whose designs on controlling the throne threaten a tenuous peace; the dragon princess Daenerys, heir to the former dynasty, who waits just over the Narrow Sea with her malevolent brother Viserys; and the Great Wall--a massive barrier of ice where a forgotten danger is stirring.',
+      'poster_path': '/zwaj4egrhnXOBIit1tyb4Sbt3KP.jpg',
+      'season_number': 1
+    };
+
+    test('should return a valid model from JSON', () {
+      final result = TelevisionSeasonModel.fromJson(json);
+
+      expect(result, testTelevisionSeasonModel);
+    });
+  });
+}
