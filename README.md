@@ -1,4 +1,4 @@
-[![Codemagic build status](https://api.codemagic.io/apps/6349b672816f0c62fd191b04/6349b672816f0c62fd191b03/status_badge.svg)](https://codemagic.io/apps/6349b672816f0c62fd191b04/6349b672816f0c62fd191b03/latest_build)
+[![Codemagic build status](https://api.codemagic.io/apps/6349b672816f0c62fd191b04/ci/status_badge.svg)](https://codemagic.io/apps/6349b672816f0c62fd191b04/ci/latest_build)
 # Ditonton
 My last project of Menjadi Flutter Developer Expert course at Dicoding.
 ---
