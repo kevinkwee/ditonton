@@ -1,31 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../common/state_enum.dart';
 import '../../common/utils.dart';
-import '../provider/television/watchlist_show_notifier.dart';
+import '../../domain/entities/television_watchlist.dart';
+import '../../injection.dart';
+import '../bloc/data_getter/data_getter_bloc.dart';
+import '../bloc/watchlist_televisions/watchlist_televisions_bloc.dart';
 import '../widgets/television_card.dart';
 
-class WatchlistShowsPage extends StatefulWidget {
+class WatchlistShowsPage extends StatelessWidget {
   const WatchlistShowsPage({super.key});
 
-  // ignore: constant_identifier_names
-  static const ROUTE_NAME = '/watchlist-shows';
+  static const routeName = '/watchlist-shows';
 
   @override
-  State<WatchlistShowsPage> createState() => _WatchlistShowsPageState();
-}
-
-class _WatchlistShowsPageState extends State<WatchlistShowsPage>
-    with RouteAware {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-      () => context.read<WatchlistShowNotifier>().fetchTelevisionWatchlist(),
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => locator<WatchlistTelevisionsBloc>()
+        ..add(DataGetterEvent.requested(NoParam())),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('TV Watchlist'),
+        ),
+        body: const _WatchlistShowsPageBody(),
+      ),
     );
   }
+}
 
+class _WatchlistShowsPageBody extends StatefulWidget {
+  const _WatchlistShowsPageBody();
+
+  @override
+  State<_WatchlistShowsPageBody> createState() =>
+      __WatchlistShowsPageBodyState();
+}
+
+class __WatchlistShowsPageBodyState extends State<_WatchlistShowsPageBody>
+    with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,8 +46,9 @@ class _WatchlistShowsPageState extends State<WatchlistShowsPage>
 
   @override
   void didPopNext() {
-    super.didPopNext();
-    context.read<WatchlistShowNotifier>().fetchTelevisionWatchlist();
+    context
+        .read<WatchlistTelevisionsBloc>()
+        .add(DataGetterEvent.requested(NoParam()));
   }
 
   @override
@@ -46,24 +59,22 @@ class _WatchlistShowsPageState extends State<WatchlistShowsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('TV Watchlist'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Consumer<WatchlistShowNotifier>(
-          builder: (context, notifier, child) {
-            if (notifier.state == RequestState.Loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (notifier.state == RequestState.Loaded) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: BlocBuilder<WatchlistTelevisionsBloc,
+          DataGetterState<List<TelevisionWatchlist>>>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            loadSuccess: (televisions) {
+              if (televisions.isEmpty) {
+                return const Center(
+                  child: Text('Empty Watchlist'),
+                );
+              }
+
               return ListView.builder(
-                itemCount: notifier.televisionWatchlist.length,
                 itemBuilder: (context, index) {
-                  final televisionWatchlist =
-                      notifier.televisionWatchlist[index];
+                  final televisionWatchlist = televisions[index];
                   return TelevisionCard(
                     id: televisionWatchlist.id,
                     name: televisionWatchlist.name,
@@ -71,15 +82,18 @@ class _WatchlistShowsPageState extends State<WatchlistShowsPage>
                     posterPath: televisionWatchlist.posterPath,
                   );
                 },
+                itemCount: televisions.length,
               );
-            } else {
-              return Center(
-                key: const Key('error_message'),
-                child: Text(notifier.message),
-              );
-            }
-          },
-        ),
+            },
+            loadFailure: (message) => Center(
+              key: const Key('error_message'),
+              child: Text(message),
+            ),
+            orElse: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        },
       ),
     );
   }

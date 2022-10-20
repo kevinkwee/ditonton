@@ -1,83 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
-import '../../common/state_enum.dart';
-import '../../injection.dart' as di;
-import '../provider/television/show_search_notifier.dart';
+import '../../domain/entities/television.dart';
+import '../../injection.dart';
+import '../bloc/data_getter/data_getter_bloc.dart';
+import '../bloc/television_search/television_search_bloc.dart';
 import '../widgets/television_card.dart';
 
 class TelevisionSearchPage extends StatelessWidget {
-  const TelevisionSearchPage({super.key});
+  static const routeName = '/tv-search';
 
-  // ignore: constant_identifier_names
-  static const ROUTE_NAME = '/tv-search';
+  const TelevisionSearchPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => di.locator<ShowSearchNotifier>(),
-      builder: (context, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('TV Search'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Search title',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
-                  ),
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (query) {
-                    context.read<ShowSearchNotifier>().fetchShowSearch(query);
-                  },
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Search Result',
-                  style: kHeading6,
-                ),
-                Consumer<ShowSearchNotifier>(
-                  builder: (context, value, child) {
-                    if (value.state == RequestState.Loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (value.state == RequestState.Loaded) {
-                      final results = value.searchResults;
-                      return Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: results.length,
-                          itemBuilder: (context, index) {
-                            final television = value.searchResults[index];
-                            return TelevisionCard(
-                              id: television.id,
-                              name: television.name,
-                              overview: television.overview,
-                              posterPath: television.posterPath,
-                            );
-                          },
-                        ),
-                      );
-                    } else {
-                      return Expanded(
-                        child: Container(),
-                      );
-                    }
-                  },
-                ),
-              ],
+    return BlocProvider(
+      create: (context) => locator<TelevisionSearchBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('TV Search'),
+        ),
+        body: const _TelevisionSearchPageBody(),
+      ),
+    );
+  }
+}
+
+class _TelevisionSearchPageBody extends StatelessWidget {
+  const _TelevisionSearchPageBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            onSubmitted: (query) {
+              context
+                  .read<TelevisionSearchBloc>()
+                  .add(DataGetterEvent.requested(query));
+            },
+            decoration: const InputDecoration(
+              hintText: 'Search title',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(),
             ),
+            textInputAction: TextInputAction.search,
           ),
-        );
-      },
+          const SizedBox(height: 16),
+          Text(
+            'Search Result',
+            style: kHeading6,
+          ),
+          BlocBuilder<TelevisionSearchBloc, DataGetterState<List<Television>>>(
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Expanded(
+                  child: Center(
+                    child: Text('Search for televisions'),
+                  ),
+                ),
+                loadInProgress: () => const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                loadSuccess: (televisions) {
+                  if (televisions.isEmpty) {
+                    return const Expanded(
+                      child: Center(
+                        child: Text('No Result'),
+                      ),
+                    );
+                  }
+
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemBuilder: (context, index) {
+                        final television = televisions[index];
+                        return TelevisionCard(
+                          id: television.id,
+                          name: television.name,
+                          overview: television.overview,
+                          posterPath: television.posterPath,
+                        );
+                      },
+                      itemCount: televisions.length,
+                    ),
+                  );
+                },
+                loadFailure: (message) => Expanded(
+                  child: Center(
+                    child: Text('Error: $message'),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

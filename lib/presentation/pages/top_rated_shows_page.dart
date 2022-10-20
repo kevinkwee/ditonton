@@ -1,60 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../common/state_enum.dart';
-import '../../injection.dart' as di;
-import '../provider/television/top_rated_shows_notifier.dart';
+import '../../domain/entities/television.dart';
+import '../../injection.dart';
+import '../bloc/data_getter/data_getter_bloc.dart';
+import '../bloc/top_rated_television/top_rated_television_bloc.dart';
 import '../widgets/television_card.dart';
 
 class TopRatedShowsPage extends StatelessWidget {
   const TopRatedShowsPage({super.key});
 
-  // ignore: constant_identifier_names
-  static const ROUTE_NAME = '/top-rated-shows';
+  static const routeName = '/top-rated-shows';
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) =>
-          di.locator<TopRatedShowsNotifier>()..fetchTopRatedShows(),
-      builder: (context, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Top Rated TV Shows'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Consumer<TopRatedShowsNotifier>(
-              builder: (context, value, child) {
-                final state = value.state;
-                if (state == RequestState.Loading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state == RequestState.Loaded) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      final television = value.televisionShows[index];
-                      return TelevisionCard(
-                        id: television.id,
-                        name: television.name,
-                        overview: television.overview,
-                        posterPath: television.posterPath,
-                      );
-                    },
-                    itemCount: value.televisionShows.length,
-                  );
-                } else {
-                  return Center(
-                    key: const Key('error_message'),
-                    child: Text(value.message),
-                  );
-                }
+    return BlocProvider(
+      create: (context) => locator<TopRatedTelevisionBloc>()
+        ..add(DataGetterEvent.requested(NoParam())),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Top Rated TV Shows'),
+        ),
+        body: const _TopRatedShowsPageBody(),
+      ),
+    );
+  }
+}
+
+class _TopRatedShowsPageBody extends StatelessWidget {
+  const _TopRatedShowsPageBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: BlocBuilder<TopRatedTelevisionBloc,
+          DataGetterState<List<Television>>>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            loadSuccess: (televisions) => ListView.builder(
+              itemBuilder: (context, index) {
+                final television = televisions[index];
+                return TelevisionCard(
+                  id: television.id,
+                  name: television.name,
+                  overview: television.overview,
+                  posterPath: television.posterPath,
+                );
               },
+              itemCount: televisions.length,
             ),
-          ),
-        );
-      },
+            loadFailure: (message) => Center(
+              key: const Key('error_message'),
+              child: Text(message),
+            ),
+            orElse: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

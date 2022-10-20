@@ -1,3 +1,1 @@
-// ignore_for_file: constant_identifier_names
-
-enum RequestState { Empty, Loading, Loaded, Error }
+enum RequestState { empty, loading, loaded, error }

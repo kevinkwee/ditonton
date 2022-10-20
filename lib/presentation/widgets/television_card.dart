@@ -26,7 +26,7 @@ class TelevisionCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(
             context,
-            TelevisionDetailPage.ROUTE_NAME,
+            TelevisionDetailPage.routeName,
             arguments: id,
           );
         },
@@ -68,7 +68,7 @@ class TelevisionCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
-                  imageUrl: '$BASE_IMAGE_URL$posterPath',
+                  imageUrl: '$baseImageUrl$posterPath',
                   width: 80,
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),

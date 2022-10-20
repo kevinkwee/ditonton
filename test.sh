@@ -47,13 +47,13 @@ runTests () {
 
 runReport() {
     if [ -f "coverage/lcov.info" ] && ! [ "$TRAVIS" ]; then
-        genhtml coverage/lcov.info -o coverage --no-function-coverage -s
-        
-		if $IsWindows || $ENV:OS; then
-			start coverage/index.html
-		else
-			open coverage/index.html
-		fi
+      genhtml coverage/lcov.info -o coverage --no-function-coverage -s
+      
+      if [ "$(uname)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+        open coverage/index.html
+      else
+        start coverage/index.html
+      fi
     fi
 }
 
