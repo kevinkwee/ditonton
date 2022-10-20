@@ -11,7 +11,7 @@ I made changes to this starter project according to the criteria given by Dicodi
    - [x] Runs every time there is a push of the latest code into the repository.
    - [x] Display the build status badge in the GitHub repository readme file.
    - [ ] Attach a screenshot of one of the builds of the CI service.
- - [ ] Use BLoC library
+ - [x] Use BLoC library
  - [x] Implement SSL Pinning
  - [ ] Integrate Firebase Analytics and Crashlytics
    - [ ] Ensure developers always receive feedback from users, especially regarding stability and error reports.
