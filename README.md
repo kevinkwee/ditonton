@@ -1,4 +1,5 @@
 [![Codemagic build status](https://api.codemagic.io/apps/6349b672816f0c62fd191b04/ci/status_badge.svg)](https://codemagic.io/apps/6349b672816f0c62fd191b04/ci/latest_build)
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 # Ditonton
 My last project of Menjadi Flutter Developer Expert course at Dicoding.
 ---
@@ -14,7 +15,7 @@ I made changes to this starter project according to the criteria given by Dicodi
  - [x] Use BLoC library
  - [x] Implement SSL Pinning
  - [ ] Integrate Firebase Analytics and Crashlytics
-   - [ ] Ensure developers always receive feedback from users, especially regarding stability and error reports.
+   - [x] Ensure developers always receive feedback from users, especially regarding stability and error reports.
    - [ ] Attach screenshots of Analytics and Crashlytics pages.
 
 ## Notes

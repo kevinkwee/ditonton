@@ -20,6 +20,9 @@ dependencies:
   television:
     path: packages/television
   get_it: ^7.2.0
+  firebase_core: ^2.1.0
+  firebase_crashlytics: ^3.0.2
+  firebase_analytics: ^10.0.2
 
 dev_dependencies:
   flutter_test:
