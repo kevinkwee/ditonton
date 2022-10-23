@@ -1,4 +1,9 @@
 <p align="center">
+  <img src="https://user-images.githubusercontent.com/19345886/197376033-a3069d67-9f3a-4e90-a3e0-c99cca109a9d.png" width="80%" alt="Codemagic build" />
+  </br>
+</p>
+
+<p align="center">
   <a href="https://codemagic.io/apps/6349b672816f0c62fd191b04/ci/latest_build"><img src="https://api.codemagic.io/apps/6349b672816f0c62fd191b04/ci/status_badge.svg" alt="Codemagic build status"></a>
   <a href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square" alt="melos"></a>
 </p>
@@ -10,11 +15,11 @@ Ditonton is an application starter project for Dicoding's Menjadi Flutter Develo
 I made changes to this starter project according to the criteria given by Dicoding.
 
 ## Criteria
- - [ ] Implement *Continous Integration*
+ - [x] Implement *Continous Integration*
    - [x] Run application tests automatically. All tests must be passed and retain the features of the previous submission.
    - [x] Runs every time there is a push of the latest code into the repository.
    - [x] Display the build status badge in the GitHub repository readme file.
-   - [ ] Attach a screenshot of one of the builds of the CI service.
+   - [x] Attach a screenshot of one of the builds of the CI service.
  - [x] Use BLoC library
  - [x] Implement SSL Pinning
  - [x] Integrate Firebase Analytics and Crashlytics
